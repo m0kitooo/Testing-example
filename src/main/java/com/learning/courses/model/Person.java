@@ -42,4 +42,7 @@ public class Person {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "tutor")
   private List<Course> tutoringCourses;
 
+  @Embedded
+  private Contact contact;
+
 }
