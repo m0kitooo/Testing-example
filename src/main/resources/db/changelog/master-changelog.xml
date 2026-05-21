@@ -12,4 +12,24 @@
       stripComments="true"/>
   </changeSet>
 
+  <changeSet id="01-add-course-status-column" author="system">
+    <sqlFile dbms="postgresql"
+             encoding="utf8"
+             endDelimiter=";"
+             path="01-add-course-status-column.sql"
+             relativeToChangelogFile="true"
+             splitStatements="true"
+             stripComments="true"/>
+  </changeSet>
+
+  <changeSet id="02-create-contact-data" author="system">
+    <sqlFile dbms="postgresql"
+             encoding="utf8"
+             endDelimiter=";"
+             path="02-create-contact-data.sql"
+             relativeToChangelogFile="true"
+             splitStatements="true"
+             stripComments="true"/>
+  </changeSet>
+
 </databaseChangeLog>

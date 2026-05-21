@@ -1,20 +1,14 @@
 package com.learning.courses.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
-import java.util.Set;
+import com.learning.courses.model.enums.CourseStatus;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.List;
 
 @Validated
 @NoArgsConstructor
@@ -34,10 +28,17 @@ public class Course {
 
   private Integer courseLength;
 
+  @Enumerated(EnumType.STRING)
+  private CourseStatus status;
+
   @ManyToOne
   @JoinColumn(name = "tutor_id", referencedColumnName = "id", nullable = false)
   private Person tutor;
 
-  @ManyToMany(mappedBy = "assignedCourses")
-  private Set<Person> assignedStudents;
+  @OneToMany(mappedBy = "course")
+  private List<PersonCourse> assignedPersonCourse;
+
+  public List<Person> getStudents() {
+    return assignedPersonCourse.stream().map(PersonCourse::getStudent).toList();
+  }
 }

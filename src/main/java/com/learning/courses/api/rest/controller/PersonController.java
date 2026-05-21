@@ -1,12 +1,18 @@
 package com.learning.courses.api.rest.controller;
 
+import com.learning.courses.dto.ContactDTO;
+import com.learning.courses.dto.CreateContactDTO;
 import com.learning.courses.dto.CreatePersonDTO;
+import com.learning.courses.dto.DetailedPersonDTO;
+import com.learning.courses.dto.DegreeDTO;
 import com.learning.courses.dto.PersonDTO;
+import com.learning.courses.service.PersonCourseService;
 import com.learning.courses.service.PersonService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 class PersonController {
 
   private final PersonService personService;
+  private final PersonCourseService personCourseService;
 
   @PostMapping
   @Operation(summary = "Create person")
@@ -25,7 +32,7 @@ class PersonController {
 
   @GetMapping("/{id}")
   @Operation(summary = "Get person")
-  public PersonDTO getPerson(@PathVariable Long id) {
+  public DetailedPersonDTO getPerson(@PathVariable Long id) {
     return personService.getPerson(id);
   }
 
@@ -35,12 +42,23 @@ class PersonController {
     return personService.updatePerson(id, updatedPerson);
   }
 
-  public void addStudentToCourse() {
-
+  @PatchMapping("/grade")
+  @Operation(summary = "Grade a student")
+  public void gradeStudent(@RequestBody @Valid DegreeDTO degreeDTO) {
+    personCourseService.gradeStudent(degreeDTO);
   }
 
-  public void getAllPersonCourses() {
+  @PostMapping("/{id}/contacts")
+  @Operation(summary = "Add contact to person")
+  public ResponseEntity<ContactDTO> addContact(@PathVariable Long id, @RequestBody @Valid CreateContactDTO createContactDTO) {
+    return ResponseEntity.ok(personService.addContact(id, createContactDTO));
+  }
 
+  @DeleteMapping("/{id}/contacts")
+  @Operation(summary = "Delete contact from person")
+  public ResponseEntity<Void> deleteContact(@PathVariable Long id) {
+    personService.deleteContact(id);
+    return ResponseEntity.noContent().build();
   }
 
 }
